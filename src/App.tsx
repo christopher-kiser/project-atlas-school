@@ -218,7 +218,8 @@ function Atlas() {
         href="#main-content"
         onClick={(e) => {
           e.preventDefault();
-          mainRef.current?.focus();
+          window.scrollTo(0, 0);
+          mainRef.current?.focus({ preventScroll: true });
         }}
       >
         Skip to content

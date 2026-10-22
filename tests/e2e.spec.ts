@@ -174,7 +174,18 @@ test("mobile navigation and representative views fit a narrow viewport", async (
     `Keyboard focus must not enter hidden navigation: ${focused.text}`,
   ).toBeGreaterThanOrEqual(0);
   expect(focused.right).toBeLessThanOrEqual(390);
-  await page.locator("#main-content").focus();
+  await page.getByRole("link", { name: "Skip to content" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#main-content")).toBeFocused();
+  const contentPosition = await page.evaluate(() => ({
+    heading: document.querySelector("#main-content h1")!.getBoundingClientRect()
+      .top,
+    header: document.querySelector(".topbar")!.getBoundingClientRect().bottom,
+  }));
+  expect(
+    contentPosition.heading,
+    "Skip-to-content must keep the heading below the sticky header",
+  ).toBeGreaterThanOrEqual(contentPosition.header);
   await screenshot(page, "dashboard-mobile.png");
   const menu = page.getByRole("button", { name: "Open navigation" });
   await menu.click();
@@ -291,13 +302,11 @@ test("practical support and PNG evidence survive backup, fresh-browser restore, 
   await page
     .getByLabel("Project/reference links · one per line")
     .fill("https://example.com/atlas-evidence");
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "evidence.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(pngBase64, "base64"),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "evidence.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(pngBase64, "base64"),
+  });
   await expect(page.getByRole("img", { name: "evidence.png" })).toBeVisible();
   await page.getByRole("button", { name: "Save evidence & assess" }).click();
   await expect(
@@ -553,14 +562,12 @@ test("certification scores and portfolio attestations persist with explicit evid
     ),
   ).toBeVisible();
   await open(page, "portfolio");
-  const project = page
-    .locator(".portfolio-card")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Linux web service",
-        exact: true,
-      }),
-    });
+  const project = page.locator(".portfolio-card").filter({
+    has: page.getByRole("heading", {
+      name: "Linux web service",
+      exact: true,
+    }),
+  });
   await expect(
     project.getByText("Evidence in progress", { exact: true }),
   ).toBeVisible();
