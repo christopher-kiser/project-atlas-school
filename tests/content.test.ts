@@ -6,6 +6,8 @@ import {
   projects,
   resources,
   sections,
+  videos,
+  videosForLesson,
 } from "../src/content";
 import { assessAnswer, isRecognitionExercise } from "../src/lib/learning";
 import { safeUrl } from "../src/lib/storage";
@@ -88,7 +90,22 @@ describe("Curriculum contracts", () => {
           true,
         );
     }
+    for (const video of videos) {
+      for (const id of video.lessonIds)
+        expect(lessonIds.has(id), `Video references ${id}`).toBe(true);
+    }
     for (const lesson of lessons) {
+      expect(
+        videosForLesson(lesson.id).length,
+        `${lesson.id} needs a relevant video`,
+      ).toBeGreaterThan(0);
+      for (const id of lesson.prerequisites) {
+        const prerequisite = lessons.find((l) => l.id === id)!;
+        if (prerequisite.section === lesson.section)
+          expect(lessons.indexOf(prerequisite)).toBeLessThan(
+            lessons.indexOf(lesson),
+          );
+      }
       expect(sectionIds.has(lesson.section), `${lesson.id} section`).toBe(true);
       expect(
         lesson.resourceIds.length,

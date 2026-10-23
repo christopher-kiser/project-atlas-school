@@ -1,5 +1,6 @@
 import { foundations } from "./foundations";
 import { advanced } from "./advanced";
+import { expanded } from "./expanded";
 import type { Lesson } from "./types";
 export { sections } from "./sections";
 export { resources } from "./resources";
@@ -129,123 +130,33 @@ const field: Lesson = {
   },
   resourceIds: ["aws", "security"],
 };
-export const lessons: Lesson[] = [...foundations, ...advanced, field].sort(
-  (a, b) => a.section - b.section,
-);
-export const lessonById = (id: string) => lessons.find((l) => l.id === id);
-export const expansionBacklog = [
-  {
-    section: 6,
-    items: [
-      "Loops, functions, arguments, and defensive quoting",
-      "Backup rotation and restore tests",
-      "Idempotent deployment helpers",
-    ],
-  },
-  {
-    section: 7,
-    items: [
-      "HTTP APIs with timeouts and retries",
-      "subprocess argument safety",
-      "Cloud SDK pagination, error handling, and tests",
-    ],
-  },
-  {
-    section: 8,
-    items: [
-      "Subnetting drills and IPv6 packet paths",
-      "TLS/reverse-proxy failure lab",
-      "VPN and multi-network route diagnosis",
-    ],
-  },
-  {
-    section: 9,
-    items: [
-      "Managed databases and responsibility boundaries",
-      "High availability vs disaster recovery",
-      "Cost estimation with current regional inputs",
-    ],
-  },
-  {
-    section: 10,
-    items: [
-      "Guided EC2/VPC/S3 provisioning with budget preflight",
-      "EBS, Elastic IP, Route 53, and Systems Manager labs",
-      "RDS, ALB, and Auto Scaling failure drills",
-      "CloudWatch/CloudTrail investigation",
-      "Lambda and SQS/SNS failure/retry patterns",
-    ],
-  },
-  {
-    section: 11,
-    items: [
-      "Provider modules, imports, lifecycle and data sources",
-      "Remote state locking and recovery",
-      "Separate environment deployment practical",
-    ],
-  },
-  {
-    section: 12,
-    items: [
-      "Dockerfile layering and build cache",
-      "Compose health, volumes, and networks",
-      "Registry digests and image review",
-    ],
-  },
-  {
-    section: 13,
-    items: [
-      "OIDC deployment identity",
-      "Approvals, branch protection, and artifact promotion",
-      "Blue/green and canary rollout exercises",
-    ],
-  },
-  {
-    section: 14,
-    items: [
-      "Instrumented logs/metrics/traces lab",
-      "Alert tuning and burn rates",
-      "Timed incident simulation",
-    ],
-  },
-  {
-    section: 15,
-    items: [
-      "SSH hardening and patch verification",
-      "Secrets rotation drill",
-      "Cloud vulnerability and audit investigation",
-    ],
-  },
-  {
-    section: 16,
-    items: [
-      "Local cluster installation lab",
-      "ConfigMap/Secret and namespace boundaries",
-      "Ingress, Helm, scaling and rollout failures",
-    ],
-  },
-  {
-    section: 17,
-    items: [
-      "PowerShell environment and permissions lab",
-      "Remote administration boundaries",
-      "Windows network diagnostic practical",
-    ],
-  },
-  {
-    section: 18,
-    items: [
-      "AI-generated patch adversarial review",
-      "Test generation and architecture critique",
-      "Delayed unaided troubleshooting assessment",
-    ],
-  },
-  {
-    section: 19,
-    items: [
-      "Caching and database tradeoffs",
-      "Queue retry/idempotency implementation",
-      "Restore rehearsal and cost/performance study",
-    ],
-  },
-];
+// Keep section order, placing prerequisites from that section before their dependents.
+const catalog: Lesson[] = [
+  ...expanded.filter((l) => l.section === 0),
+  ...foundations,
+  ...advanced,
+  field,
+  ...expanded.filter((l) => l.section !== 0),
+].sort((a, b) => a.section - b.section);
+const byId = new Map(catalog.map((l) => [l.id, l]));
+const ordered: Lesson[] = [];
+const placed = new Set<string>();
+const visiting = new Set<string>();
+function place(lesson: Lesson) {
+  if (placed.has(lesson.id)) return;
+  if (visiting.has(lesson.id))
+    throw new Error(`Circular lesson prerequisite: ${lesson.id}`);
+  visiting.add(lesson.id);
+  for (const id of lesson.prerequisites) {
+    const prerequisite = byId.get(id);
+    if (prerequisite?.section === lesson.section) place(prerequisite);
+  }
+  visiting.delete(lesson.id);
+  placed.add(lesson.id);
+  ordered.push(lesson);
+}
+catalog.forEach(place);
+export const lessons = ordered;
+export const lessonById = (id: string) => byId.get(id);
+export { expansionBacklog } from "./backlog";
+export { videos, videosForLesson } from "./videos";

@@ -12,13 +12,15 @@ import {
   LockKeyhole,
   Menu,
   Milestone,
+  Play,
   RotateCcw,
   Search,
   Settings2,
   Terminal,
   X,
 } from "lucide-react";
-import { lessons } from "./content";
+import { lessons, sections, projects } from "./content";
+import { VideoLibrary } from "./components/Videos";
 import {
   createInitialData,
   getReviewQueue,
@@ -42,7 +44,7 @@ import {
 } from "./components/Pages";
 
 const navigation = [
-  { path: "dashboard", label: "Overview", icon: LayoutDashboard },
+  { path: "dashboard", label: "My classroom", icon: LayoutDashboard },
   { path: "curriculum", label: "Learning path", icon: BookOpen },
   { path: "practice", label: "Practice lab", icon: Terminal },
   { path: "review", label: "Review queue", icon: RotateCcw },
@@ -50,6 +52,7 @@ const navigation = [
   { path: "certifications", label: "Certifications", icon: GraduationCap },
   { path: "career", label: "Career roadmap", icon: Milestone },
   { path: "resources", label: "Resource library", icon: Library },
+  { path: "videos", label: "Video library", icon: Play },
 ];
 class AppBoundary extends Component<
   { children: ReactNode },
@@ -147,6 +150,29 @@ function Atlas() {
       : active === "migration"
         ? "dashboard"
         : active;
+  const currentLesson =
+    active === "lesson" ? lessons.find((l) => l.id === parts[1]) : undefined;
+  const currentSection = sections.find(
+    (s) =>
+      s.id ===
+      (currentLesson?.section ??
+        (active === "section" ? Number(parts[1]) : -1)),
+  );
+  const currentTitle =
+    currentLesson?.title ??
+    currentSection?.title ??
+    (active === "portfolio" && parts[1]
+      ? projects.find((p) => p.id === parts[1])?.title
+      : undefined) ??
+    navigation.find((n) => n.path === navActive)?.label ??
+    (active === "settings"
+      ? "Settings & backups"
+      : active === "migration"
+        ? "Import prior learning"
+        : "Atlas");
+  useEffect(() => {
+    document.title = `${currentTitle} · Atlas School`;
+  }, [currentTitle]);
   if (!data)
     return (
       <main className="boot-screen">
@@ -189,6 +215,9 @@ function Atlas() {
       break;
     case "career":
       page = <Career {...props} />;
+      break;
+    case "videos":
+      page = <VideoLibrary />;
       break;
     case "resources":
       page = <Resources />;
@@ -308,12 +337,25 @@ function Atlas() {
             >
               <Menu size={20} />
             </button>
-            <span>Workspace</span>
-            <ChevronRight size={14} />
-            <strong>
-              {navigation.find((n) => n.path === navActive)?.label ??
-                (active === "settings" ? "Settings & backups" : "Atlas")}
-            </strong>
+            <nav className="location-trail" aria-label="Breadcrumb">
+              <a href={link("dashboard")}>Classroom</a>
+              {currentSection && (
+                <>
+                  <ChevronRight size={13} />
+                  <a href={link("curriculum")}>Learning path</a>
+                </>
+              )}
+              {currentLesson && currentSection && (
+                <>
+                  <ChevronRight size={13} />
+                  <a href={link(`section/${currentSection.id}`)}>
+                    {currentSection.title}
+                  </a>
+                </>
+              )}
+              <ChevronRight size={13} />
+              <strong aria-current="page">{currentTitle}</strong>
+            </nav>
           </div>
           <div className="topbar-actions">
             <div className="global-search">

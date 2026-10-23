@@ -10,11 +10,12 @@ The Pages address is the configured deployment target. Confirm publication throu
 
 ## What is included
 
-- **37 released lessons across a 22-section competency map**, from Linux foundations through cloud, automation, containers, security, reliability, and architecture.
+- **61 released lessons across a 22-section competency map**, from Linux foundations through cloud, automation, containers, security, reliability, and architecture.
 - Retrieval, prediction, diagnosis, command-fill exercises, spaced review, weak-area tracking, a simulated terminal, and a diagnostic decision exercise.
 - Practical submissions with output, commands, explanation, code, configuration, links, and supported screenshots.
 - **8 portfolio project briefs**, including a production-style capstone, with evidence rubrics and recorded peer-review notes.
-- **12 selective certification checkpoints** and **28 curated resources**, including two videos linked by their official MIT lecture pages.
+- **24 selected videos** from Harvard, MIT, Microsoft, AWS and other official educators, available in every lesson’s **Videos** tab and a separate video library.
+- **12 selective certification checkpoints** and **28 curated references**.
 - Existing Atlas history and a short calibration, so previously practiced material is recognized without being silently marked mastered.
 - IndexedDB persistence, validated JSON export/import, and merge behavior for moving progress between computers.
 - Local autosaved practical/project drafts that survive navigation and refresh without awarding progress.
@@ -24,7 +25,7 @@ The later sections contain usable bridge lessons, not a complete expert curricul
 ## Start learning
 
 1. Open Atlas and visit **Existing Atlas Progress** to calibrate current recall.
-2. Use **Learning path** to continue the relevant lesson and **Practice lab** to rehearse troubleshooting.
+2. Use **Learning path** to continue the relevant lesson. Open its **Videos** tab or **Watch this lesson** shortcut, then use **Retrieve** and **Practical** to apply what you learned.
 3. Complete the real practical in the declared environment, then save evidence and your explanation.
 4. Return to **Review queue** after a delay. Unaided recall and independent practical work are separate requirements.
 5. Build and review projects in **Portfolio studio**, and use **Career roadmap** to see missing evidence.
@@ -63,7 +64,7 @@ Open the preview address with `/project-atlas-school/`. Playwright may require o
 
 ## Your data and backups
 
-Progress is stored in this browser profile and origin using IndexedDB. There is no account, backend, automatic cloud sync, or transmission of submissions to an Atlas server. External links open the resource provider’s website; GitHub Pages still serves the application normally.
+Progress is stored in this browser profile and origin using IndexedDB. There is no account, backend, automatic cloud sync, or transmission of submissions to an Atlas server. Video players contact their credited publisher only after you select Load video. External links open the resource provider’s website; GitHub Pages still serves the application normally.
 
 Use **Download JSON backup** before changing devices, switching browsers, clearing site data, or relying on a long-term record. Browser eviction, private-browsing behavior, storage permissions, and quota limits can affect local data. Production and local-development origins have separate stores. The backup includes screenshots and potentially sensitive text you chose to submit; redact secrets before saving or sharing it. Backups are ordinary JSON, not encrypted files.
 
@@ -90,7 +91,7 @@ If you fork under a different repository name, update `base` in `vite.config.ts`
 
 Atlas checks deterministic answers and the completeness of locally submitted evidence. It does not execute arbitrary Linux commands, inspect a real cloud account, authenticate peer reviewers, or verify external certificates. The terminal simulation models a small teaching scenario and does not confer real-lab credit. “Portfolio Verified” is a local peer-review attestation with evidence requirements, not a signed credential.
 
-No AWS resources are created automatically. Live labs require an authorized sandbox and current cost review; design-only work is kept distinct from actual operating evidence. Free offers, exam prices, and service behavior change. Official-source research is dated **22 October 2026**; see [RESEARCH.md](docs/RESEARCH.md) for sources and restrictions. Video titles and provenance were checked, but playback and geographic availability were not tested.
+No AWS resources are created automatically. Live labs require an authorized sandbox and current cost review; design-only work is kept distinct from actual operating evidence. Free offers, exam prices, and service behavior change. Official-source research is dated **22 October 2026**; see [RESEARCH.md](docs/RESEARCH.md) for sources and restrictions. Selected videos were checked for actual playback where documented; availability can vary by publisher, region and browser. See [video sources](docs/VIDEO-SOURCES.md) and [expanded lessons](docs/CURRICULUM-EXPANSION.md) for the exact scope and verification limits.
 
 Automated tests cover learning rules, storage/backup behavior, content contracts, and the browser scenarios implemented in the test suite. Chromium checks do not establish full Safari compatibility, exhaustive accessibility conformance, or correctness of every real-world command on every operating system. Use the documented lab environment and report specific failures.
 

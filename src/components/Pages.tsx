@@ -1,3 +1,4 @@
+import { VideoLibrary } from "./Videos";
 import { useState } from "react";
 import { link } from "../lib/navigation";
 import { useDraftState } from "../lib/useDraftState";
@@ -22,6 +23,7 @@ import {
   LockKeyhole,
   Milestone,
   Monitor,
+  Play,
   RotateCcw,
   Search,
   ShieldCheck,
@@ -742,14 +744,17 @@ export function LessonPage(props: DataProps & { id: string }) {
         </details>
       )}
       <nav className="tabs" aria-label="Lesson stages">
-        {["Learn", "Retrieve", "Practical", "Resources"].map((t) => (
+        {["Learn", "Videos", "Retrieve", "Practical", "Resources"].map((t) => (
           <button
             key={t}
             className={tab === t ? "active" : ""}
+            aria-pressed={tab === t}
             onClick={() => setTab(t)}
           >
             {t === "Learn" ? (
               <BookOpen size={16} />
+            ) : t === "Videos" ? (
+              <Play size={16} />
             ) : t === "Retrieve" ? (
               <RotateCcw size={16} />
             ) : t === "Practical" ? (
@@ -763,6 +768,21 @@ export function LessonPage(props: DataProps & { id: string }) {
       </nav>
       {tab === "Learn" && (
         <>
+          <div className="lesson-video-shortcut">
+            <div>
+              <Play size={20} />
+              <span>
+                <strong>Video support for this lesson</strong>
+                <small>
+                  Watch the explanation, then return here to practice.
+                </small>
+              </span>
+            </div>
+            <button className="button primary" onClick={() => setTab("Videos")}>
+              Watch this lesson
+              <ArrowRight size={16} />
+            </button>
+          </div>
           <div className="lesson-columns">
             <div>
               <section className="panel lesson-outcomes">
@@ -876,6 +896,23 @@ export function LessonPage(props: DataProps & { id: string }) {
       )}
       {tab === "Practical" && (
         <LabWorkspace key={lesson.id} {...props} lesson={lesson} />
+      )}
+      {tab === "Videos" && (
+        <>
+          <VideoLibrary lessonId={lesson.id} section={lesson.section} />
+          <div className="button-row lesson-video-next">
+            <button className="button" onClick={() => setTab("Learn")}>
+              Back to the explanation
+            </button>
+            <button
+              className="button primary"
+              onClick={() => setTab("Retrieve")}
+            >
+              Ready? Practice recall
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        </>
       )}
       {tab === "Resources" && (
         <section className="panel">

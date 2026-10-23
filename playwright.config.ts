@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Run npm run build first. An explicit URL verifies an already deployed build.
 const remoteURL = process.env.ATLAS_TEST_URL;
-const baseURL = `${(remoteURL ?? "http://127.0.0.1:4173/project-atlas-school/").replace(/\/$/, "")}/`;
+const baseURL = `${(remoteURL ?? "http://127.0.0.1:4174/project-atlas-school/").replace(/\/$/, "")}/`;
 
 export default defineConfig({
   testDir: "./tests",
@@ -31,7 +31,7 @@ export default defineConfig({
   webServer: remoteURL
     ? undefined
     : {
-        command: "npm run preview -- --port 4173",
+        command: "npm run preview -- --port 4174",
         url: baseURL,
         reuseExistingServer: true,
         timeout: 90_000,

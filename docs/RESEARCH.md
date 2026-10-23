@@ -1,5 +1,7 @@
 # Curriculum and certification research
 
+The updated 24-video catalog and playback evidence are in [VIDEO-SOURCES.md](VIDEO-SOURCES.md); the video notes below describe the earlier two-link selection.
+
 Research date: **22 October 2026**. This is a dated editorial review, not continuous monitoring. Certification checkout, regional pricing, exam versions, language availability, and external pages can change. The live catalogs are `src/content/resources.ts` and `src/content/certifications.ts`.
 
 ## How the sources shaped Atlas

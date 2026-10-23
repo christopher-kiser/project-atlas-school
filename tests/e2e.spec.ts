@@ -22,6 +22,7 @@ async function open(page: Page, route: string) {
     certifications: "Credentials that support the work.",
     career: "Readiness follows the evidence.",
     resources: "Good references. Clear purpose.",
+    videos: "The Atlas video library.",
     settings: "Take your progress with you.",
     migration: "Pick up where you left off.",
   };
@@ -128,6 +129,7 @@ test("all public application routes render without runtime errors or broken loca
     "certifications",
     "career",
     "resources",
+    "videos",
     "settings",
     "migration",
     ...sections.map((s) => `section/${s.id}`),
@@ -144,6 +146,15 @@ test("all public application routes render without runtime errors or broken loca
       page.getByRole("heading", { name: "Atlas could not open this view." }),
       route,
     ).toHaveCount(0);
+    if (route.startsWith("lesson/")) {
+      const lesson = lessons.find((l) => route === `lesson/${l.id}`)!;
+      await expect(
+        page.getByRole("navigation", { name: "Breadcrumb" }),
+      ).toContainText(lesson.title);
+      await page.getByRole("button", { name: "Videos", exact: true }).click();
+      await expect(page.locator(".video-card").first()).toBeVisible();
+      await expect(page.locator("iframe,video")).toHaveCount(0);
+    }
   }
   await open(page, "lesson/does-not-exist");
   await expect(
@@ -610,6 +621,7 @@ test("certification scores and portfolio attestations persist with explicit evid
 for (const route of [
   "dashboard",
   "lesson/troubleshoot-nginx",
+  "videos",
   "settings",
   "portfolio",
 ]) {

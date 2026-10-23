@@ -21,10 +21,10 @@ Keep `package-lock.json` consistent with dependency changes. Avoid adding a runt
 
 | Change                                            | Primary owner                                                                    |
 | ------------------------------------------------- | -------------------------------------------------------------------------------- |
-| Lesson text, exercises, practicals                | `src/content/foundations.ts`, `advanced.ts`, or the lesson catalog in `index.ts` |
+| Lesson text, exercises, practicals                | `src/content/foundations.ts`, `advanced.ts`, `expanded.ts`, or the lesson catalog in `index.ts` |
 | Topic map and prerequisites                       | `src/content/sections.ts` and the affected lesson records                        |
 | Project briefs and rubric                         | `src/content/projects.ts`                                                        |
-| External teaching resources and exam checkpoints  | `src/content/resources.ts`, `certifications.ts`, and `docs/RESEARCH.md`          |
+| External teaching resources and exam checkpoints  | `src/content/resources.ts`, `certifications.ts`, `videos.ts`, and the dated source notes          |
 | Answer evaluation, retrieval, and evidence states | `src/lib/learning.ts`                                                            |
 | Career and capability gates                       | `src/lib/gates.ts`                                                               |
 | Backup validation, merge, and persistence         | `src/lib/storage.ts`                                                             |

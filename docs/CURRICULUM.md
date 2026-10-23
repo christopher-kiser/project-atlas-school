@@ -2,7 +2,7 @@
 
 Atlas develops the ability to inspect a system, explain its behavior, make a small justified change, and prove the result. The pathway starts with Linux and terminal fluency, moves through networking and automation, and builds toward operating cloud systems. Certifications support that work; they do not define the course or replace project evidence.
 
-The curriculum has 22 competency sections rather than a weekly schedule. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
+The curriculum now has 61 released lessons across 22 competency sections rather than a weekly schedule. It includes 24 expanded beginner/tool lessons and 24 supporting video selections. Every lesson has its own Videos stage; videos supplement written teaching and practical evidence. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
 
 ## What a lesson must accomplish
 
@@ -45,9 +45,11 @@ Linux remains the server environment. Windows and macOS are supported client env
 
 ## Present depth and truthful release labels
 
-The foundational lesson family is in `foundations.ts`. It provides small-step teaching and repeated terminal practice around the learner’s existing Linux work. Sections 6–19 currently have usable bridge lessons in `advanced.ts`: each contains real teaching and a practical, but one bridge does not exhaust its section’s topic map. The separate `aws-field` checkpoint in `index.ts` requires actual AWS observations and cannot be satisfied by a design diagram alone.
+The foundational lesson family is in `foundations.ts`, with computing/web basics and additional hands-on depth in `expanded.ts`. It provides small-step teaching and repeated terminal practice around the learner’s existing Linux work. Sections 6–19 currently have usable bridge lessons in `advanced.ts`: each contains real teaching and a practical, but one bridge does not exhaust its section’s topic map. The separate `aws-field` checkpoint in `index.ts` requires actual AWS observations and cannot be satisfied by a design diagram alone.
 
-Examples of deliberate boundaries: the first Terraform lab uses `terraform_data` locally and does not establish AWS-provider proficiency; the container bridge runs an existing image and does not constitute a complete Dockerfile/Compose course; the Kubernetes bridge reads a deployment and does not establish cluster administration; the cloud design bridge is not evidence of a live deployment. These are useful, bounded lessons. Their larger topic families remain in the content backlog.
+The 24 expanded lessons add beginner computing/editor work, Bash and Python practice, SQLite constraints/transactions, local Terraform modules/state refactoring, Docker builds/Compose health, artifact promotion, observability, threat modeling and a local Kubernetes workload. See [CURRICULUM-EXPANSION.md](CURRICULUM-EXPANSION.md) for exact scope and tool-execution limits. Introductory bridges remain useful preparation; these additions do not exhaust production cloud engineering.
+
+Examples of deliberate boundaries: Terraform uses local built-in resources; AWS examples distinguish simulations from the separate real-account field checkpoint; local Kubernetes work does not establish production cluster administration.
 
 Sections 20–21 are supported by project briefs and capability gates rather than presented as a complete collection of additional lecture lessons. The eight project briefs are actionable assignments, but advanced projects can require official documentation and additional study beyond the released bridges.
 
