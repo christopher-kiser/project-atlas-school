@@ -1,4 +1,29 @@
+export type CommandTopic = {
+  id: string;
+  title: string;
+  kind: "program" | "syntax" | "workflow";
+  explanation: string;
+  example: string;
+  parts: { token: string; meaning: string }[];
+  expected: string;
+  question: string;
+  answer: string;
+};
+export type CommandLesson = {
+  demoMode: "terminal" | "editor" | "graphical" | "reference";
+  demoWhere: string;
+  environment: string;
+  orientation: string;
+  topics: CommandTopic[];
+  entries: {
+    command: string;
+    mode: "terminal" | "editor" | "graphical" | "reference";
+    where: string;
+  }[];
+};
+
 export type LessonStudyGuide = {
+  commandLesson?: CommandLesson;
   startingPoint: string;
   whyItMatters: string;
   required: string[];

@@ -285,7 +285,11 @@ function project(value: unknown, name: string): ProjectSubmission {
 }
 function certification(value: unknown, name: string): CertificationScore {
   const v = record(value, name);
-  keys(v, ["id", "certificationId", "score", "at", "source"], name);
+  keys(
+    v,
+    ["id", "certificationId", "score", "at", "source", "kind", "credentialUrl"],
+    name,
+  );
   if (
     typeof v.score !== "number" ||
     !Number.isFinite(v.score) ||
@@ -293,12 +297,31 @@ function certification(value: unknown, name: string): CertificationScore {
     v.score > 100
   )
     fail(`${name}.score must be a number from 0 to 100.`);
+  const kind =
+    v.kind === undefined
+      ? undefined
+      : enumeration(
+          v.kind,
+          ["practice", "study", "credential"] as const,
+          `${name}.kind`,
+        );
+  const source = text(v.source, `${name}.source`, 2000);
+  if (kind === "credential" && (v.score !== 0 || !source.trim()))
+    fail(`${name} completion needs a source and a zero score placeholder.`);
+  if (kind !== "credential" && v.credentialUrl !== undefined)
+    fail(
+      `${name} practice and study scores cannot contain credential metadata.`,
+    );
   return {
     id: id(v.id, `${name}.id`),
     certificationId: id(v.certificationId, `${name}.certificationId`),
     score: v.score,
     at: time(v.at, `${name}.at`),
-    source: text(v.source, `${name}.source`, 2000),
+    source,
+    ...(kind === undefined ? {} : { kind }),
+    ...(v.credentialUrl === undefined
+      ? {}
+      : { credentialUrl: safeUrl(v.credentialUrl, `${name}.credentialUrl`) }),
   };
 }
 function unique<T extends { id: string }>(items: T[], name: string): T[] {

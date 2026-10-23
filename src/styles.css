@@ -3319,7 +3319,7 @@ fieldset.submission-panel {
 @media (max-width: 700px) {
   .tabs[aria-label="Lesson stages"] {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
     overflow: visible;
   }
@@ -3412,4 +3412,189 @@ fieldset.submission-panel {
     align-items: stretch;
     flex-direction: column;
   }
+}
+
+/* Shared curriculum views retain the existing classroom design tokens. */
+.month-plan {
+  margin-block: 18px;
+}
+.month-plan > summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  cursor: pointer;
+}
+.month-plan > summary strong {
+  flex: 1 1 240px;
+}
+.month-plan > summary .fine {
+  margin: 0;
+}
+.pathway {
+  margin-block: 32px;
+}
+.credential-costs {
+  display: grid;
+  grid-template-columns: minmax(85px, 120px) minmax(0, 1fr);
+  gap: 10px 18px;
+}
+.credential-costs dt {
+  font-weight: 700;
+}
+.credential-costs dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.cert-detail > .panel {
+  margin-block: 20px;
+}
+.cert-detail .answer-options {
+  display: grid;
+  gap: 10px;
+}
+.cert-detail .answer-options label {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.cert-detail .answer-options input {
+  width: auto;
+  flex: 0 0 auto;
+}
+.cert-detail legend {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.project-milestones {
+  margin-block: 24px;
+}
+@media (max-width: 600px) {
+  .credential-costs {
+    grid-template-columns: 1fr;
+  }
+  .credential-costs dd {
+    margin-bottom: 12px;
+  }
+}
+
+/* Explicit command teaching: reading, editing and terminal work are separate. */
+.command-learning-stage > .panel {
+  margin-bottom: 22px;
+}
+.command-lesson-intro,
+.lesson-worked-example {
+  scroll-margin-top: 100px;
+}
+.command-environment,
+.command-action,
+.command-prediction {
+  padding: 18px;
+  margin-block: 18px;
+  background: #18212a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.command-environment p:last-child,
+.command-action p:last-child {
+  margin-bottom: 0;
+}
+.command-topic {
+  margin-block: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.command-topic > summary {
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.command-topic summary::marker {
+  color: var(--mint);
+}
+.command-reading-example {
+  border-left: 3px solid var(--mint);
+  padding: 14px;
+  background: #0c1118;
+  border-radius: 6px;
+}
+.command-reading-example pre {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.command-parts > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 180px) minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.command-parts dt {
+  overflow-wrap: anywhere;
+}
+.command-parts dd {
+  margin: 0;
+}
+.command-location {
+  margin-block: 16px;
+}
+.command-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block: 24px;
+}
+.code-block .reference-example {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .command-parts > div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .command-topic {
+    padding: 13px;
+  }
+}
+
+.credential-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-block: 20px;
+}
+.credential-filters [aria-pressed="true"] {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+.cert-milestone-label {
+  display: block;
+  font-size: 12px;
+  color: var(--mint);
+  margin-top: 10px;
+}
+.credential-milestone {
+  padding: 20px;
+  background: #18212a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-block: 24px;
+}
+.credential-milestone > h3:first-child {
+  margin-top: 0;
+}
+.credential-milestone details {
+  margin-block: 20px;
+}
+.credential-milestone li {
+  margin-block: 10px;
 }

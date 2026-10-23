@@ -1,3 +1,7 @@
+import { commandLessonFor } from "./tool-guides";
+import { pathwayLessons } from "./pathway-lessons";
+export { engineeringMonths, portfolioMilestones } from "./pathway";
+export { certificationPractice } from "./certification-practice";
 import { foundations } from "./foundations";
 import { advanced } from "./advanced";
 import { expanded } from "./expanded";
@@ -135,11 +139,20 @@ const field: Lesson = {
 const catalog: Lesson[] = [
   ...expanded.filter((l) => l.section === 0),
   ...foundations,
+  ...pathwayLessons,
   ...advanced,
   field,
   ...expanded.filter((l) => l.section !== 0),
 ]
-  .map((lesson) => ({ ...lesson, study: studyGuides[lesson.id] }))
+  .map((lesson) => {
+    const study = lesson.study ?? studyGuides[lesson.id];
+    return {
+      ...lesson,
+      study: study
+        ? { ...study, commandLesson: commandLessonFor(lesson) }
+        : undefined,
+    };
+  })
   .sort((a, b) => a.section - b.section);
 const byId = new Map(catalog.map((l) => [l.id, l]));
 const ordered: Lesson[] = [];

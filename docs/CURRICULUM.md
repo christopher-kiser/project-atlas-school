@@ -2,7 +2,7 @@
 
 Atlas develops the ability to inspect a system, explain its behavior, make a small justified change, and prove the result. The pathway starts with Linux and terminal fluency, moves through networking and automation, and builds toward operating cloud systems. Certifications support that work; they do not define the course or replace project evidence.
 
-The curriculum now has 61 released lessons across 22 competency sections rather than a weekly schedule. It includes 24 expanded beginner/tool lessons and 24 supporting video selections. Every lesson has its own Videos stage; videos supplement written teaching and practical evidence. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
+The curriculum now has 63 released lessons across 22 competency sections rather than a weekly schedule. It includes 24 expanded beginner/tool lessons and 24 supporting video selections. Every lesson has its own Videos stage; videos supplement written teaching and practical evidence. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
 
 ## What a lesson must accomplish
 
@@ -20,7 +20,7 @@ Every released lesson now has an authored study guide, reviewed using the knowle
 
 The command explorer explains each listed command's program, flags or operands, expected output or side effects, and a common mistake. Supporting syntax from examples is also explained. Learners should understand what a command will do and consult help for unfamiliar syntax; the course does not require memorizing every option a tool supports.
 
-The page sequence is **prepare → understand → explain commands → read a worked example → follow observable steps → rehearse with less help → recall → practical evidence**. Videos remain available for every lesson as support within this sequence. Readiness questions are self-checks, not new completion buttons or assessment credit. Lesson and exercise IDs, saved evidence, and the distinction between guided and independent work remain stable.
+The page sequence is **prepare → understand → open Tools & commands → read a worked example → follow observable steps → rehearse with less help → recall → practical evidence**. Videos remain available for every lesson as support within this sequence. Readiness questions are self-checks, not new completion buttons or assessment credit. Lesson and exercise IDs, saved evidence, and the distinction between guided and independent work remain stable.
 
 Content is owned by the three `guides-*.ts` files and assembled in `study-guides.ts`. `LessonStudy.tsx` renders the common flow. Academy attaches this teaching content in the server catalog; signed-out visitors receive no study guide. The personal school includes the same teaching material with its existing local progress storage.
 
@@ -127,3 +127,21 @@ Certification readiness uses additional checklists and legitimate practice exams
 ## Expanding a section
 
 Add depth in the smallest useful lesson units. Every new lesson needs a concrete task, likely failure, observable evidence, a recovery test, and later retrieval of earlier skills. Test demonstrations on the declared environment, verify version-sensitive documentation, and distinguish local simulation from real operation. Add a released lesson only when its practical can be attempted honestly; a topic name, diagram, or future idea remains backlog until teaching and evidence requirements exist.
+
+## Six-month review implementation · October 23, 2026
+
+The Career roadmap now maps six competency-paced phases to real lessons, eight preserved portfolio briefs, independent tasks and interleaved review. The original April 2027 target is conditional on demonstrated capability. Two new prerequisite lessons teach CIDR planning and a tested Python CLI through safe fixtures. Existing practical and delayed retrieval rules remain in force.
+
+The certification view distinguishes provider-issued credential types, training versus assessment costs, exact lesson preparation and outstanding gaps. Short CLF/SAA teaching sets (14 scenarios each) save `kind: study`; they never satisfy the separate unseen mock target. Learners can record self-reported earned credentials with safe optional links; Atlas does not verify or issue the award. Older version-1 backups remain readable; older published readers reject the new optional fields, so future rollout/rollback must retain compatible readers.
+
+Pure content is shared through `curriculum-manifest.json` and `scripts/curriculum-sync.mjs`; run `npm run check:curriculum` independently in either repo. After reviewing changed content, `node scripts/curriculum-sync.mjs --refresh` updates its manifest. To copy from a reviewed peer use `--from <checkout> --write`; the command refuses dirty destination content. Review both adapters/PRs and their manifests; neither script deploys. Authentication, storage, accounts and payments remain app-owned.
+
+See [educational audit](EDUCATIONAL-AUDIT.md) for the A–T gaps and eight project evaluations, and [implementation report](DUAL-SITE-IMPLEMENTATION.md) for current execution evidence and remaining acceptance.
+
+## Explicit tool guidance and credential checkpoints
+
+Every released lesson has a **Tools & commands** stage. `tool-guides.ts` maps 63 lessons to 42 program-family explanations and the 21 shell/language/workflow topics in `command-syntax.ts`. Each card identifies the program or language, breaks an example into parts, predicts its observation, and asks for an explanation. Existing per-command guides retain the exact invocation, result and mistake. Graphical actions, editor contents, terminal input and reference sketches have distinct execution labels. Graphical instructions and practical solution prose have no terminal copy button.
+
+Windows file basics explain the actual file manager/editor workflow, saved location and extension; see [Microsoft File Explorer guidance](https://support.microsoft.com/en-gb/windows/experience/fileexplorer/file-explorer-in-windows) and [Notepad help](https://support.microsoft.com/en-us/windows/apps/help-in-notepad). Bash pipes and streams follow the [GNU pipeline](https://www.gnu.org/software/bash/manual/html_node/Pipelines) and [redirection](https://www.gnu.org/s/bash/manual/html_node/Redirections.html) rules. A file of Python source is distinguished from its [interpreter launch](https://docs.python.org/3/tutorial/interpreter.html). Code examples are read in the named environment; the site does not execute them.
+
+The credential catalogue now has 29 pathways, 16 verified free routes and one conditional Microsoft route. The filter separates free awarded credentials from free preparation for paid exams. All cards have an `After ...` milestone mapped to existing lessons and optional project evidence. The page derives the next preparation step from saved competency; it does not infer provider eligibility, award a badge or predict a pass. Provider-specific learning, practicals and assessment gates remain explicit. See [credential research](CREDENTIAL-RESEARCH.md) for current official sources and availability limits.

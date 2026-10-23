@@ -69,7 +69,14 @@ export type CertificationScore = {
   score: number;
   at: string;
   source: string;
+  /** Older version-1 records omit kind and remain practice scores. */
+  kind?: "practice" | "study" | "credential";
+  credentialUrl?: string;
 };
+/** Only full practice results count toward the separate exam-readiness target. */
+export function isPracticeScore(value: CertificationScore): boolean {
+  return value.kind === undefined || value.kind === "practice";
+}
 export type AtlasData = {
   version: 1;
   createdAt: string;

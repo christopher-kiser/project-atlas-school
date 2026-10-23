@@ -126,7 +126,12 @@ export const videos: VideoLesson[] = [
     publisher: "Microsoft Learn · Microsoft Virtual Academy",
     url: "https://learn.microsoft.com/en-us/shows/networking-fundamentals/06",
     section: 3,
-    lessonIds: ["network-addresses", "network-dns", "cloud-packet"],
+    lessonIds: [
+      "network-addresses",
+      "network-cidr",
+      "network-dns",
+      "cloud-packet",
+    ],
     durationLabel: "56 min 13 sec",
     summary:
       "Watch the selected networking-services episode directly. Follow how address configuration and services make a network usable, then use the Atlas DNS and packet-path labs to test your own observations.",
@@ -228,7 +233,7 @@ export const videos: VideoLesson[] = [
     publisher: "Harvard University · CS50",
     url: "https://cs50.harvard.edu/python/weeks/0/",
     section: 7,
-    lessonIds: ["python-data", "python-inventory"],
+    lessonIds: ["python-data", "python-cli", "python-inventory"],
     durationLabel: "1 hr 45 min 38 sec",
     summary:
       "Begin the Python sequence with functions, variables, values, and output. Predict each small program before running it, then transfer the same input-and-output reasoning to an operational tool.",
