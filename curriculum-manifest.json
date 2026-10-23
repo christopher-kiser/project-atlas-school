@@ -5,7 +5,8 @@
     "src/content/advanced.ts": "d67c893bed1c5daf8654c86572a107d075b31741594ba434cd4185558a330915",
     "src/content/backlog.ts": "73aea387151fd23e0be556e666e5faf62825d99208f72b0339d37d031307499c",
     "src/content/certification-practice.ts": "c88a0ad8eb229daa75d50e1f5c07a657f7c1ac6feab136a3ae018de08244fd44",
-    "src/content/certifications.ts": "1ce01e223dc9bca52122ae4bceddc96336dcd1c5822b608b35727a683f2157d9",
+    "src/content/certifications.ts": "0ad07976a55fb11a3e579154d1705dbd4cec5d9f6bc3d01b84a20a5a1d2b2890",
+    "src/content/command-syntax.ts": "28023bc77a3fe51a3ead03cbf44c244674afaca7ebe830398310699bfe1b68bb",
     "src/content/expanded.ts": "99ebbe693178fdbc764f98ab5765d9542187a418b42728be3c106609694442a3",
     "src/content/foundations.ts": "d1d8706c2c58c924eafa6bb114801925a4ab40640f076a98395c36a743ccd630",
     "src/content/guides-advanced.ts": "759bfb66c95d394b8252e1cfbeb3abc7cb5c5f97c83a9264e2de372bf61774a8",
@@ -17,7 +18,8 @@
     "src/content/resources.ts": "fe46045edf8a4b75f46d0d532f374272b3aff7f5d8647c3c14ec4e58be68140a",
     "src/content/sections.ts": "055106edf7da5603e216e3d9f300cfd79e41831715466620896cfd2acfe8c4de",
     "src/content/study-guides.ts": "1060150c7dbcd9d342a9c0e3ca421faca891e3fd3f95384ee01c880f18f969a5",
-    "src/content/study-types.ts": "0a04fd1089ddf453195065ec0a86871dbf52d900975400e53b537854a6df9579",
+    "src/content/study-types.ts": "b1b6b1fdd577a4bf18ad20ae1ed5184e9264d43a5c7ed5fad58fc6afd53c4b0c",
+    "src/content/tool-guides.ts": "a79c61effd171efcd9e19bc41cb4abcff1e5569303888767bc85fc4466552a04",
     "src/content/videos.ts": "9bba9f5dd92ad43be99145acef9c64f0eea29225df526d3385c4e8c81041ebab"
   }
 }

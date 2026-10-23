@@ -85,7 +85,7 @@ export function LessonStudyOverview({ guide }: { guide: LessonStudyGuide }) {
       </div>
       <nav className="study-path" aria-label="Learning sequence">
         <span>1. Understand the ideas</span>
-        <span>2. Explain the commands</span>
+        <span>2. Open Tools & commands</span>
         <span>3. Follow the walkthrough</span>
         <span>4. Recall, then prove it</span>
       </nav>

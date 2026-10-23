@@ -3,6 +3,8 @@ import { CommandExplanation } from "./LessonStudy";
 import { useDraftState } from "../lib/useDraftState";
 import {
   ArrowRight,
+  BookOpen,
+  FileText,
   Check,
   CircleHelp,
   Copy,
@@ -38,36 +40,52 @@ export type DataProps = {
 };
 export function CodeBlock({
   code,
-  title = "Terminal · read before running",
+  title = "Example · read in the stated environment",
+  presentation = "reference",
 }: {
   code: string;
   title?: string;
+  presentation?: "terminal" | "code" | "reference";
 }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="code-block">
       <div className="code-top">
         <span>
-          <Terminal size={14} />
+          {presentation === "terminal" ? (
+            <Terminal size={14} />
+          ) : presentation === "code" ? (
+            <FileText size={14} />
+          ) : (
+            <BookOpen size={14} />
+          )}
           {title}
         </span>
-        <button
-          className="icon-button"
-          aria-label="Copy code"
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(code);
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1800);
-            } catch {
-              setCopied(false);
-            }
-          }}
-        >
-          {copied ? <Check size={15} /> : <Copy size={15} />}
-        </button>
+        {presentation !== "reference" && (
+          <button
+            className="icon-button"
+            aria-label="Copy code"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(code);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1800);
+              } catch {
+                setCopied(false);
+              }
+            }}
+          >
+            {copied ? <Check size={15} /> : <Copy size={15} />}
+          </button>
+        )}
       </div>
-      <pre>
+      <pre
+        tabIndex={0}
+        aria-label={title}
+        className={
+          presentation === "reference" ? "reference-example" : undefined
+        }
+      >
         <code>{code}</code>
       </pre>
     </div>
@@ -229,7 +247,21 @@ export function ExerciseCard({
 export function CommandExplorer({ lesson }: { lesson: Lesson }) {
   const [index, setIndex] = useState(0);
   const command = lesson.commands[index];
-  if (!command) return null;
+  if (!command)
+    return (
+      <section className="panel">
+        <h2>No terminal commands to run here</h2>
+        <p>
+          This lesson develops reasoning and review skills. Follow the tools and
+          reading guidance, then work through the example. Do not paste its
+          worksheet or design sketch into a terminal.
+        </p>
+      </section>
+    );
+  const entry = lesson.study?.commandLesson?.entries.find(
+    (item) => item.command === command.command,
+  );
+  const mode = entry?.mode ?? "reference";
   const detail = lesson.study?.commandDetails.find(
     (item) => item.command === command.command,
   );
@@ -241,13 +273,16 @@ export function CommandExplorer({ lesson }: { lesson: Lesson }) {
   return (
     <section className="panel">
       <div className="section-heading">
-        <h2>Command explorer</h2>
-        <span className="muted">One tool at a time</span>
+        <h2>Commands and actions, explained</h2>
+        <span className="muted">
+          {index + 1} of {lesson.commands.length}
+        </span>
       </div>
       <p className="muted">
-        Choose each command to read its parts, expected result, and common
-        mistakes. The supporting syntax below explains other expressions used in
-        the worked example.
+        Choose each item in order. A program name, an example command, code for
+        a file and a graphical action are different things. The label tells you
+        where the example belongs. Card titles are names to learn; type only the
+        complete example when the lesson asks you to run it.
       </p>
       <div className="command-tabs" role="group" aria-label="Choose a command">
         {lesson.commands.map((c, i) => (
@@ -262,7 +297,50 @@ export function CommandExplorer({ lesson }: { lesson: Lesson }) {
         ))}
       </div>
       <h3>{command.purpose}</h3>
-      <CodeBlock code={command.example} />
+      <div className="command-location">
+        <span className="pill">
+          {mode === "graphical"
+            ? "Graphical action"
+            : mode === "editor"
+              ? "Code or configuration"
+              : mode === "terminal"
+                ? "Terminal command"
+                : "Read and reason"}
+        </span>
+        <p>
+          {entry?.where ??
+            "Read this example alongside the lesson walkthrough."}
+        </p>
+      </div>
+      {mode === "graphical" ? (
+        <div className="command-action">
+          <strong>Action to take</strong>
+          <p>{command.example}</p>
+          <p className="fine">
+            Use the named application. This is an instruction to follow, not
+            text to type into a terminal.
+          </p>
+        </div>
+      ) : (
+        <CodeBlock
+          code={command.example}
+          presentation={
+            mode === "terminal"
+              ? "terminal"
+              : mode === "editor"
+                ? "code"
+                : "reference"
+          }
+          title={
+            mode === "terminal"
+              ? "Terminal example · check the environment above"
+              : mode === "editor"
+                ? "File or language example · not a shell command"
+                : "Reference example · read, do not execute"
+          }
+        />
+      )}
+
       {detail && <CommandExplanation detail={detail} />}
       {command.caution && (
         <p className="notice amber">
@@ -270,6 +348,25 @@ export function CommandExplorer({ lesson }: { lesson: Lesson }) {
           {command.caution}
         </p>
       )}
+      <div className="command-pagination">
+        <button
+          className="button secondary small"
+          disabled={index === 0}
+          onClick={() => setIndex((i) => i - 1)}
+        >
+          Previous item
+        </button>
+        <span className="fine">
+          {index + 1} / {lesson.commands.length}
+        </span>
+        <button
+          className="button secondary small"
+          disabled={index === lesson.commands.length - 1}
+          onClick={() => setIndex((i) => i + 1)}
+        >
+          Next item
+        </button>
+      </div>
       {extra.length > 0 && (
         <details className="study-extra-syntax" open>
           <summary>Supporting syntax to understand</summary>
@@ -450,7 +547,8 @@ export function LabWorkspace({
         {showSolution && (
           <CodeBlock
             code={lesson.lab.solution}
-            title="Worked solution · support recorded"
+            title="Worked solution · read as guidance · support recorded"
+            presentation="reference"
           />
         )}
         <div className="independent-challenge">

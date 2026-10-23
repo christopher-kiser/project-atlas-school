@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { lessons, projects, sections } from "../src/content";
+import { lessons, projects, sections, certifications } from "../src/content";
 import type { AtlasData } from "../src/lib/learning";
 
 const screenshotRoot = path.resolve(process.cwd(), "../../work/e2e");
@@ -167,6 +167,12 @@ test("all public application routes render without runtime errors or broken loca
         "open",
         false,
       );
+      await page
+        .getByRole("button", { name: "Tools & commands", exact: true })
+        .click();
+      await expect(
+        page.getByRole("region", { name: "Tools and command learning plan" }),
+      ).toBeVisible();
       for (const command of lesson.commands) {
         await page
           .getByRole("group", { name: "Choose a command" })
@@ -361,7 +367,9 @@ test("practical support and PNG evidence survive backup, fresh-browser restore, 
     .getByRole("button", { name: "Reveal solution", exact: true })
     .click();
   await expect(
-    page.getByText("Worked solution · support recorded", { exact: true }),
+    page.getByText("Worked solution · read as guidance · support recorded", {
+      exact: true,
+    }),
   ).toBeVisible();
   await page.reload();
   await page.getByRole("button", { name: "Practical", exact: true }).click();
@@ -786,4 +794,128 @@ test("six-month plan, study practice and provider reports preserve evidence boun
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();
   expect(result.violations.map((v) => v.id)).toEqual([]);
+});
+
+test("tools stage distinguishes graphical actions, scripts and pipes without granting progress", async ({
+  page,
+}) => {
+  await open(page, "lesson/computing-basics");
+  await expect(
+    page
+      .locator(".lesson-worked-example")
+      .getByRole("button", { name: "Copy code" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Study tools & commands", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Tools and command learning plan" }),
+  ).toBeFocused();
+  const explorer = page.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: "Commands and actions, explained",
+      exact: true,
+    }),
+  });
+  await explorer
+    .getByRole("button", { name: "Text editor", exact: true })
+    .click();
+  await expect(
+    explorer.getByText("Graphical action", { exact: true }),
+  ).toBeVisible();
+  await expect(explorer.getByRole("button", { name: "Copy code" })).toHaveCount(
+    0,
+  );
+  await expect(explorer.locator(".command-action")).toContainText(
+    "welcome.txt",
+  );
+  await expect(
+    explorer.getByRole("button", { name: "Next item", exact: true }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", {
+      name: "Continue to the worked example",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator(".lesson-worked-example")).toBeFocused();
+  await open(page, "lesson/terminal-streams");
+  await page
+    .getByRole("button", { name: "Tools & commands", exact: true })
+    .click();
+  const pipe = page.locator('[data-topic-id="pipe"]');
+  if (!(await pipe.evaluate((el) => (el as HTMLDetailsElement).open)))
+    await pipe.locator("summary").first().click();
+  await expect(pipe).toContainText("stdout");
+  await pipe.getByText("Compare your explanation", { exact: true }).click();
+  await expect(pipe.locator(".command-prediction details")).toHaveJSProperty(
+    "open",
+    true,
+  );
+  await open(page, "lesson/python-files-json");
+  await page
+    .getByRole("button", { name: "Tools & commands", exact: true })
+    .click();
+  await expect(page.locator(".command-location").last()).toContainText(
+    "Code or configuration",
+  );
+  const data = await readData(page);
+  expect(data.attempts).toHaveLength(0);
+  expect(data.submissions).toHaveLength(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const result = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(result.violations.map((v) => v.id)).toEqual([]);
+});
+
+test("free credential filter and curriculum checkpoints give a next step without an award", async ({
+  page,
+}) => {
+  await open(page, "certifications");
+  const freeCount = certifications.filter(
+    (c) => c.freeStatus === "Free credential",
+  ).length;
+  await page
+    .getByRole("button", {
+      name: `Free credentials (${freeCount})`,
+      exact: true,
+    })
+    .click();
+  await expect(page.locator(".cert-card")).toHaveCount(freeCount);
+  await expect(
+    page.getByRole("heading", {
+      name: "AWS Certified Solutions Architect – Associate",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  const milestone = page.getByRole("region", {
+    name: "Curriculum timing for Cisco Networking Basics",
+  });
+  await expect(
+    milestone.getByRole("heading", { name: "When to attempt this credential" }),
+  ).toBeVisible();
+  await expect(
+    milestone.getByRole("link", { name: /Next preparation lesson:/ }),
+  ).toBeVisible();
+  await milestone
+    .getByText("See the exact curriculum checkpoint", { exact: true })
+    .click();
+  await expect(
+    milestone.getByText(/Not Yet Introduced|Learning/).first(),
+  ).toBeVisible();
+  const data = await readData(page);
+  expect(data.certifications).toHaveLength(0);
+  expect(data.attempts).toHaveLength(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

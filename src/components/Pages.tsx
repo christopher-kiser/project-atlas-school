@@ -1,3 +1,5 @@
+import { CertificationMilestone } from "./CertificationMilestone";
+import { CommandLessonIntro, CommandTopicLessons } from "./CommandLesson";
 import { EngineeringPathway, ProjectMilestones } from "./Pathway";
 import { CertificationStudy, CredentialEvidence } from "./CertificationStudy";
 import { VideoLibrary } from "./Videos";
@@ -753,7 +755,14 @@ export function LessonPage(props: DataProps & { id: string }) {
         </details>
       )}
       <nav className="tabs" aria-label="Lesson stages">
-        {["Learn", "Videos", "Retrieve", "Practical", "Resources"].map((t) => (
+        {[
+          "Learn",
+          "Tools & commands",
+          "Videos",
+          "Retrieve",
+          "Practical",
+          "Resources",
+        ].map((t) => (
           <button
             key={t}
             className={tab === t ? "active" : ""}
@@ -762,6 +771,8 @@ export function LessonPage(props: DataProps & { id: string }) {
           >
             {t === "Learn" ? (
               <BookOpen size={16} />
+            ) : t === "Tools & commands" ? (
+              <Terminal size={16} />
             ) : t === "Videos" ? (
               <Play size={16} />
             ) : t === "Retrieve" ? (
@@ -851,10 +862,52 @@ export function LessonPage(props: DataProps & { id: string }) {
               </div>
             </aside>
           </div>
-          <CommandExplorer lesson={lesson} />
-          <section className="panel">
+          <section className="panel lesson-command-shortcut">
+            <h2>Before the example: learn the tools</h2>
+            <p>
+              Find out which program to open, where to type, and what each
+              option, path, pipe or symbol means. Graphical actions and file
+              contents have their own labels.
+            </p>
+            <button
+              className="button primary"
+              onClick={() => {
+                setTab("Tools & commands");
+                requestAnimationFrame(() =>
+                  document
+                    .querySelector<HTMLElement>(
+                      '[aria-label="Tools and command learning plan"]',
+                    )
+                    ?.focus(),
+                );
+              }}
+            >
+              Study tools & commands <ArrowRight size={16} />
+            </button>
+          </section>
+          <section
+            className="panel lesson-worked-example"
+            id={`worked-${lesson.id}`}
+            tabIndex={-1}
+          >
             <h2>Read the worked example</h2>
-            <CodeBlock code={lesson.demo.code} title={lesson.demo.title} />
+            {lesson.study?.commandLesson && (
+              <p className="command-location">
+                <strong>Where this example belongs:</strong>{" "}
+                {lesson.study.commandLesson.demoWhere}
+              </p>
+            )}
+            <CodeBlock
+              code={lesson.demo.code}
+              title={lesson.demo.title}
+              presentation={
+                lesson.study?.commandLesson?.demoMode === "terminal"
+                  ? "terminal"
+                  : lesson.study?.commandLesson?.demoMode === "editor"
+                    ? "code"
+                    : "reference"
+              }
+            />
             <p>{lesson.demo.explanation}</p>
           </section>
           {lesson.study && <LessonWalkthrough guide={lesson.study} />}
@@ -875,6 +928,36 @@ export function LessonPage(props: DataProps & { id: string }) {
             </button>
           </section>
         </>
+      )}
+      {tab === "Tools & commands" && (
+        <div className="command-learning-stage">
+          <CommandLessonIntro lesson={lesson} />
+          <CommandTopicLessons lesson={lesson} />
+          <CommandExplorer lesson={lesson} />
+          <section className="panel">
+            <h2>Ready to use these ideas?</h2>
+            <p>
+              Describe the program, inputs, syntax and expected result in your
+              own words. Then follow the worked example and compare your
+              observations.
+            </p>
+            <button
+              className="button primary"
+              onClick={() => {
+                setTab("Learn");
+                requestAnimationFrame(() =>
+                  document.getElementById(`worked-${lesson.id}`)?.focus(),
+                );
+              }}
+            >
+              Continue to the worked example <ArrowRight size={16} />
+            </button>
+            <p className="fine">
+              Reading and self-checking do not award progress. Retrieval and
+              practical evidence still determine your competency.
+            </p>
+          </section>
+        </div>
       )}
       {tab === "Retrieve" && (
         <div className="retrieval-stack">
@@ -1566,6 +1649,18 @@ export function Career(props: DataProps) {
 }
 
 export function Certifications(props: DataProps) {
+  const [freeOnly, setFreeOnly] = useState(false);
+  const freeCount = certifications.filter(
+    (c) => c.freeStatus === "Free credential",
+  ).length;
+  const visibleCertifications = certifications
+    .filter((c) => !freeOnly || c.freeStatus === "Free credential")
+    .slice()
+    .sort(
+      (a, b) =>
+        Number(b.freeStatus === "Free credential") -
+        Number(a.freeStatus === "Free credential"),
+    );
   const [expanded, setExpanded] = useState<string | null>(
     "cisco-networking-basics",
   );
@@ -1614,8 +1709,34 @@ export function Certifications(props: DataProps) {
         <p>{certificationStrategy}</p>
       </div>
       <p className="fine">{certificationReadinessNote}</p>
+      <div
+        className="credential-filters"
+        role="group"
+        aria-label="Choose credential costs"
+      >
+        <button
+          className="button secondary small"
+          aria-pressed={!freeOnly}
+          onClick={() => setFreeOnly(false)}
+        >
+          All pathways ({certifications.length})
+        </button>
+        <button
+          className="button secondary small"
+          aria-pressed={freeOnly}
+          onClick={() => setFreeOnly(true)}
+        >
+          Free credentials ({freeCount})
+        </button>
+      </div>
+      <p className="fine">
+        Free credentials include assessed badges and course credentials as
+        labeled. Free training with a paid exam is listed separately. Follow the
+        curriculum checkpoint on each card, then confirm current provider
+        requirements.
+      </p>
       <div className="cert-list">
-        {certifications.map((c) => {
+        {visibleCertifications.map((c) => {
           const scores = props.data.certifications.filter(
             (s) => s.certificationId === c.id && isPracticeScore(s),
           );
@@ -1654,6 +1775,11 @@ export function Certifications(props: DataProps) {
                   <small>{c.code}</small>
                   <h2>{c.name}</h2>
                   <p>{c.cost}</p>
+                  {c.curriculumMilestone && (
+                    <span className="cert-milestone-label">
+                      {c.curriculumMilestone.label}
+                    </span>
+                  )}
                 </span>
                 <span
                   className={`pill ${c.priority === "High priority" ? "mint" : ""}`}
@@ -1686,6 +1812,7 @@ export function Certifications(props: DataProps) {
                         "Check the current provider registration and assessment requirements."}
                     </dd>
                   </dl>
+                  <CertificationMilestone certification={c} data={props.data} />
                   <div className="cert-columns">
                     <div>
                       <h3>When it makes sense</h3>
