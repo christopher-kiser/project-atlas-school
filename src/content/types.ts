@@ -1,3 +1,5 @@
+import type { LessonStudyGuide } from "./study-types";
+
 export type Exercise = {
   id: string;
   /** Default true for commands; concept names can explicitly opt out. */
@@ -10,6 +12,7 @@ export type Exercise = {
   options?: string[];
 };
 export type Lesson = {
+  study?: LessonStudyGuide;
   id: string;
   section: number;
   title: string;

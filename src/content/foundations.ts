@@ -174,7 +174,7 @@ export const foundations: Lesson[] = [
       challenge:
         "Tomorrow, start in a different directory and establish the same workspace without opening the demo. Explain one command you chose to look up rather than memorize.",
     },
-    resourceIds: ["linux-foundation", "lpi", "bash", "ai"],
+    resourceIds: ["ubuntu", "wsl", "linux-foundation", "lpi", "bash", "ai"],
   },
   {
     id: "terminal-map",

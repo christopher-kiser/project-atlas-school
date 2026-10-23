@@ -845,7 +845,7 @@ export const expanded: Lesson[] = [
     ],
     demo: {
       title: "Save as copy-report.sh",
-      code: '#!/usr/bin/env bash\ncopy_report() {\n  if [[ $# -ne 2 ]]; then return 2; fi\n  local source="$1"\n  local target="$2"\n  if [[ ! -f "$source" || ! -r "$source" || -e "$target" ]]; then\n    echo "Source invalid or target already exists" >&2\n    return 3\n  fi\n  cp -i -- "$source" "$target"\n}\ncopy_report "$@"',
+      code: '#!/usr/bin/env bash\ncopy_report() {\n  if [[ $# -ne 2 ]]; then return 2; fi\n  local source="$1"\n  local target="$2"\n  if [[ ! -f "$source" || ! -r "$source" || -e "$target" || -L "$target" ]]; then\n    echo "Source invalid or target already exists" >&2\n    return 3\n  fi\n  cp -i -- "$source" "$target"\n}\ncopy_report "$@"',
       explanation:
         '"$@" passes each caller argument as its own argument, preserving spaces. The final function status becomes the script status. -- ends option parsing for cp so a filename beginning with a dash is not interpreted as an option.',
     },

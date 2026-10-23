@@ -38,6 +38,132 @@
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --heading: "Manrope Variable", "DM Sans Variable", system-ui, sans-serif;
 }
+/* Lesson teaching: keep the required path visible and deeper study optional. */
+.study-overview,
+.study-vocabulary,
+.study-walkthrough {
+  margin-bottom: 22px;
+}
+.study-overview > p,
+.study-walkthrough > p,
+.study-vocabulary dd,
+.command-explanation dd {
+  max-width: 80ch;
+  line-height: 1.75;
+}
+.study-scope-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px;
+  margin: 24px 0;
+}
+.study-scope-grid > *,
+.study-vocabulary dl > div,
+.command-explanation > div {
+  min-width: 0;
+}
+.study-list {
+  padding-left: 20px;
+  line-height: 1.75;
+}
+.study-list li + li {
+  margin-top: 10px;
+}
+.study-optional,
+.study-extra-syntax {
+  align-self: start;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.study-optional summary,
+.study-extra-syntax summary {
+  cursor: pointer;
+  color: var(--mint);
+  font-weight: 650;
+  line-height: 1.6;
+}
+.study-optional summary:focus-visible,
+.study-extra-syntax summary:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 4px;
+}
+.study-path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+.study-vocabulary dl,
+.command-explanation {
+  display: grid;
+  gap: 16px;
+  margin: 18px 0;
+}
+.study-vocabulary dt,
+.command-explanation dt {
+  margin-bottom: 5px;
+  color: var(--mint);
+  font-weight: 650;
+}
+.study-vocabulary dd,
+.command-explanation dd {
+  margin: 0;
+  white-space: pre-line;
+}
+.study-walkthrough-steps {
+  padding-left: 28px;
+}
+.study-walkthrough-steps > li {
+  padding: 10px 0 16px 10px;
+}
+.study-walkthrough-steps > li + li {
+  border-top: 1px solid var(--border);
+}
+.study-walkthrough-steps li::marker {
+  color: var(--mint);
+  font-weight: 700;
+}
+.study-walkthrough-steps p,
+.study-readiness p {
+  line-height: 1.75;
+  white-space: pre-line;
+}
+.study-expected {
+  padding: 12px 16px;
+  border-left: 2px solid var(--mint);
+  background: #8ae7c509;
+}
+.study-readiness {
+  margin: 24px 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.study-extra-syntax {
+  margin-top: 20px;
+}
+.study-overview code,
+.study-vocabulary code,
+.command-explanation code,
+.study-walkthrough code,
+.study-readiness code,
+.study-extra-syntax h3 {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+@media (max-width: 760px) {
+  .study-scope-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .study-walkthrough-steps {
+    padding-left: 22px;
+  }
+}
 * {
   box-sizing: border-box;
 }

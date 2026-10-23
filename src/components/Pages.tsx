@@ -1,4 +1,10 @@
 import { VideoLibrary } from "./Videos";
+import {
+  LessonStudyOverview,
+  LessonVocabulary,
+  LessonWalkthrough,
+  LessonReadiness,
+} from "./LessonStudy";
 import { useState } from "react";
 import { link } from "../lib/navigation";
 import { useDraftState } from "../lib/useDraftState";
@@ -768,6 +774,7 @@ export function LessonPage(props: DataProps & { id: string }) {
       </nav>
       {tab === "Learn" && (
         <>
+          {lesson.study && <LessonStudyOverview guide={lesson.study} />}
           <div className="lesson-video-shortcut">
             <div>
               <Play size={20} />
@@ -796,6 +803,7 @@ export function LessonPage(props: DataProps & { id: string }) {
                   ))}
                 </ul>
               </section>
+              {lesson.study && <LessonVocabulary guide={lesson.study} />}
               <div className="concept-grid">
                 {lesson.concepts.map((c, i) => (
                   <article className="panel concept-card" key={c.title}>
@@ -842,17 +850,19 @@ export function LessonPage(props: DataProps & { id: string }) {
           </div>
           <CommandExplorer lesson={lesson} />
           <section className="panel">
-            <h2>Watch the reasoning</h2>
+            <h2>Read the worked example</h2>
             <CodeBlock code={lesson.demo.code} title={lesson.demo.title} />
             <p>{lesson.demo.explanation}</p>
           </section>
+          {lesson.study && <LessonWalkthrough guide={lesson.study} />}
           <section className="panel">
-            <h2>Your guided rehearsal</h2>
+            <h2>Try it with less help</h2>
             <ol className="steps">
               {lesson.practice.map((p) => (
                 <li key={p}>{p}</li>
               ))}
             </ol>
+            {lesson.study && <LessonReadiness guide={lesson.study} />}
             <button
               className="button primary"
               onClick={() => setTab("Retrieve")}

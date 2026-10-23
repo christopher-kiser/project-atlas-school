@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CommandExplanation } from "./LessonStudy";
 import { useDraftState } from "../lib/useDraftState";
 import {
   ArrowRight,
@@ -229,16 +230,30 @@ export function CommandExplorer({ lesson }: { lesson: Lesson }) {
   const [index, setIndex] = useState(0);
   const command = lesson.commands[index];
   if (!command) return null;
+  const detail = lesson.study?.commandDetails.find(
+    (item) => item.command === command.command,
+  );
+  const extra =
+    lesson.study?.commandDetails.filter(
+      (item) =>
+        !lesson.commands.some((known) => known.command === item.command),
+    ) ?? [];
   return (
     <section className="panel">
       <div className="section-heading">
         <h2>Command explorer</h2>
         <span className="muted">One tool at a time</span>
       </div>
+      <p className="muted">
+        Choose each command to read its parts, expected result, and common
+        mistakes. The supporting syntax below explains other expressions used in
+        the worked example.
+      </p>
       <div className="command-tabs" role="group" aria-label="Choose a command">
         {lesson.commands.map((c, i) => (
           <button
             className={i === index ? "selected" : ""}
+            aria-pressed={i === index}
             key={c.command}
             onClick={() => setIndex(i)}
           >
@@ -248,11 +263,25 @@ export function CommandExplorer({ lesson }: { lesson: Lesson }) {
       </div>
       <h3>{command.purpose}</h3>
       <CodeBlock code={command.example} />
+      {detail && <CommandExplanation detail={detail} />}
       {command.caution && (
         <p className="notice amber">
           <CircleHelp size={17} />
           {command.caution}
         </p>
+      )}
+      {extra.length > 0 && (
+        <details className="study-extra-syntax" open>
+          <summary>Supporting syntax to understand</summary>
+          {extra.map((item) => (
+            <div key={item.command}>
+              <h3>
+                <code>{item.command}</code>
+              </h3>
+              <CommandExplanation detail={item} />
+            </div>
+          ))}
+        </details>
       )}
     </section>
   );

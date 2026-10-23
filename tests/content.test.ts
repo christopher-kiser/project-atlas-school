@@ -17,6 +17,72 @@ function expectUnique(values: (string | number)[], label: string) {
 }
 
 describe("Curriculum contracts", () => {
+  it("gives every lesson a beginner path and explains every listed command", () => {
+    for (const lesson of lessons) {
+      const guide = lesson.study;
+      expect(guide, `${lesson.id}: missing beginner guide`).toBeDefined();
+      if (!guide) continue;
+      expect(
+        guide.startingPoint.trim(),
+        `${lesson.id}: starting point`,
+      ).not.toBe("");
+      expect(guide.whyItMatters.trim(), `${lesson.id}: purpose`).not.toBe("");
+      expect(
+        guide.required.length,
+        `${lesson.id}: required learning`,
+      ).toBeGreaterThanOrEqual(3);
+      expect(
+        guide.optional.length,
+        `${lesson.id}: optional depth`,
+      ).toBeGreaterThanOrEqual(1);
+      expect(
+        guide.terms.length,
+        `${lesson.id}: new vocabulary`,
+      ).toBeGreaterThanOrEqual(3);
+      expect(
+        guide.walkthrough.length,
+        `${lesson.id}: observable walkthrough`,
+      ).toBeGreaterThanOrEqual(3);
+      expect(
+        guide.readiness.length,
+        `${lesson.id}: readiness questions`,
+      ).toBeGreaterThanOrEqual(2);
+      expectUnique(
+        guide.commandDetails.map((detail) => detail.command),
+        `${lesson.id}: command explanations`,
+      );
+      for (const command of lesson.commands) {
+        const detail = guide.commandDetails.find(
+          (item) => item.command === command.command,
+        );
+        expect(
+          detail,
+          `${lesson.id}: explain ${command.command}`,
+        ).toBeDefined();
+      }
+      for (const detail of guide.commandDetails) {
+        for (const value of [
+          detail.command,
+          detail.breakdown,
+          detail.expected,
+          detail.pitfall,
+        ])
+          expect(
+            value.trim(),
+            `${lesson.id}: complete command explanation`,
+          ).not.toBe("");
+      }
+      for (const step of guide.walkthrough) {
+        expect(step.title.trim()).not.toBe("");
+        expect(step.instruction.trim()).not.toBe("");
+        expect(
+          step.expected.trim(),
+          `${lesson.id}: explain what to observe`,
+        ).not.toBe("");
+      }
+    }
+  });
+
   it("has unique stable IDs for all content and globally unique exercises", () => {
     expectUnique(
       lessons.map((l) => l.id),

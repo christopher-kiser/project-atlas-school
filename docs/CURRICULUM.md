@@ -14,6 +14,28 @@ Each released lesson has outcomes, concrete concepts, a bounded demonstration, p
 
 The instructional questions are consistent: What is this? Why does it matter? What does it look like? What fails? How can I inspect it? What is the smallest justified fix? What observation would prove recovery? A successful command or a green process status is evidence about one layer, not proof that an entire service is healthy.
 
+## Beginner learning path
+
+Every released lesson now has an authored study guide, reviewed using the knowledge available from its prerequisites. The guide states the starting environment and purpose, separates required learning from optional exploration, explains new vocabulary, and walks through observations before asking for independent work. Optional topics are extensions beyond the lesson's evidence requirements; they are not a claim that the topic will never matter in an engineering role.
+
+The command explorer explains each listed command's program, flags or operands, expected output or side effects, and a common mistake. Supporting syntax from examples is also explained. Learners should understand what a command will do and consult help for unfamiliar syntax; the course does not require memorizing every option a tool supports.
+
+The page sequence is **prepare → understand → explain commands → read a worked example → follow observable steps → rehearse with less help → recall → practical evidence**. Videos remain available for every lesson as support within this sequence. Readiness questions are self-checks, not new completion buttons or assessment credit. Lesson and exercise IDs, saved evidence, and the distinction between guided and independent work remain stable.
+
+Content is owned by the three `guides-*.ts` files and assembled in `study-guides.ts`. `LessonStudy.tsx` renders the common flow. Academy attaches this teaching content in the server catalog; signed-out visitors receive no study guide. The personal school includes the same teaching material with its existing local progress storage.
+
+The beginner review checks explanations, prerequisites, syntax, expected observations, and recovery from common mistakes for all 61 lessons. Structural and browser checks support that editorial review; they do not establish that a real beginner has completed the course or that every tool lab ran in every supported environment.
+
+### Beginner review evidence — October 23, 2026
+
+All 61 lessons received a prerequisite-aware beginner review and an authored guide. All 206 listed command entries have explanations of syntax, results, and mistakes; supporting examples add further syntax explanations. Structural checks protect this coverage. Browser checks open every lesson, select every listed command, and check the study plan, vocabulary, walkthrough, and retained video stage.
+
+Safe local fixtures exercised 35 lessons: 16 foundation lessons, 16 expanded lesson demonstrations (38 success/failure cases), the Python inventory example and four tests, and the Bash health/Python HTTP client demonstrations. The last two ran through 12 loopback-only checks covering valid and unhealthy replies, HTTP failure, malformed/oversized responses, stopped-server transport failure, and recovery. Temporary fixtures were removed.
+
+These are selected command/demo executions within those lessons, not proof of every practical or supported platform. Systemd/Nginx operation and actual editor/pager/browser keyboard interactions were reviewed. Terraform, Docker, Kubernetes/kind, and PowerShell tool labs were source-reviewed because the tools were unavailable in this runtime. Some host network inspection was sandbox-restricted. No cloud environment or paid resource was provisioned for the review.
+
+The review also corrected configuration-change versus Terraform-drift wording, qualified Docker loopback exposure for current engines, made the Python demo's missing validation explicit, and fixed the Bash helper's dangling-symlink target guard. Bash decisions now precede the applied health script, and Python data/validation/testing precede the inventory report. Stable content IDs and progress formats are unchanged.
+
 ## Sequence and artifacts
 
 | Section | Competency                    | Expected evidence or practical direction                                                             |

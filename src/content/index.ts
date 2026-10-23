@@ -2,6 +2,7 @@ import { foundations } from "./foundations";
 import { advanced } from "./advanced";
 import { expanded } from "./expanded";
 import type { Lesson } from "./types";
+import { studyGuides } from "./study-guides";
 export { sections } from "./sections";
 export { resources } from "./resources";
 export { certifications } from "./certifications";
@@ -14,7 +15,7 @@ const field: Lesson = {
     "Capture real EC2, VPC, S3, and IAM evidence from your own reviewed sandbox.",
   minutes: 60,
   status: "released",
-  prerequisites: ["aws-plan", "security-review"],
+  prerequisites: ["aws-plan", "aws-operations", "security-review"],
   outcomes: [
     "Explain a real cloud request path",
     "Distinguish identity denial from network failure",
@@ -137,7 +138,9 @@ const catalog: Lesson[] = [
   ...advanced,
   field,
   ...expanded.filter((l) => l.section !== 0),
-].sort((a, b) => a.section - b.section);
+]
+  .map((lesson) => ({ ...lesson, study: studyGuides[lesson.id] }))
+  .sort((a, b) => a.section - b.section);
 const byId = new Map(catalog.map((l) => [l.id, l]));
 const ordered: Lesson[] = [];
 const placed = new Set<string>();

@@ -10,7 +10,12 @@ export const advanced: Lesson[] = [
       "Turn a known diagnostic into a small script with an honest exit status.",
     minutes: 30,
     status: "released",
-    prerequisites: ["terminal-control", "troubleshoot-nginx", "git-basics"],
+    prerequisites: [
+      "terminal-control",
+      "troubleshoot-nginx",
+      "git-basics",
+      "bash-decisions",
+    ],
     outcomes: [
       "Quote a variable without splitting it",
       "Branch on a command result",
@@ -131,7 +136,7 @@ export const advanced: Lesson[] = [
       "Read structured inventory, validate it, and test the failure path.",
     minutes: 40,
     status: "released",
-    prerequisites: ["bash-health"],
+    prerequisites: ["bash-health", "python-testing"],
     outcomes: [
       "Read JSON from a file",
       "Use a function and a list comprehension",
@@ -172,7 +177,7 @@ export const advanced: Lesson[] = [
       title: "inventory.py · standard library only",
       code: 'import json\nfrom pathlib import Path\n\ndef running_names(records):\n    return [item["name"] for item in records if item["state"] == "running"]\n\nif __name__ == "__main__":\n    records = json.loads(Path("inventory.json").read_text())\n    print(running_names(records))',
       explanation:
-        'Create inventory.json containing [{"name":"web-1","state":"running"},{"name":"worker-1","state":"stopped"}]. The function returns a list; printing is kept at the entry point.',
+        'Create inventory.json containing [{"name":"web-1","state":"running"},{"name":"worker-1","state":"stopped"}]. The function returns a list; printing is kept at the entry point. Missing required name/state fields raise KeyError. The lab adds deliberate validation and tests its chosen ValueError with assertRaises; that validation is not already present in this demo.',
     },
     practice: [
       "Predict the report before running the file.",
@@ -580,7 +585,7 @@ export const advanced: Lesson[] = [
     outcomes: [
       "Read a plan before applying it",
       "Explain state as a mapping",
-      "Observe drift between configuration and prior state",
+      "Distinguish a configuration change from drift",
     ],
     concepts: [
       {
@@ -709,7 +714,7 @@ export const advanced: Lesson[] = [
       },
       {
         title: "Two ports, one mapping",
-        body: "A published port connects a host address and port to a container port. Binding to 127.0.0.1 keeps this lab accessible from the host only. A container can run while the application inside is failing.",
+        body: "A published port connects a host address and port to a container port. With a current engine and the usual bridge configuration, binding to 127.0.0.1 restricts the published port to the Docker host. Docker documents an exposure issue in releases older than 28.0.0; use an updated engine. A container can run while the application inside is failing.",
       },
       {
         title: "Reproducibility needs explicit inputs",

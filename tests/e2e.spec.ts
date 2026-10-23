@@ -109,7 +109,7 @@ test("all public application routes render without runtime errors or broken loca
   page,
   baseURL,
 }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(240_000);
   const errors: string[] = [];
   const brokenAssets: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -148,6 +148,40 @@ test("all public application routes render without runtime errors or broken loca
     ).toHaveCount(0);
     if (route.startsWith("lesson/")) {
       const lesson = lessons.find((l) => route === `lesson/${l.id}`)!;
+      await expect(
+        page.getByRole("region", { name: "Lesson study plan" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("heading", {
+          name: "What you need to learn",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("region", { name: "Lesson vocabulary" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("region", { name: "Guided lesson walkthrough" }),
+      ).toBeVisible();
+      await expect(page.locator(".study-optional")).toHaveJSProperty(
+        "open",
+        false,
+      );
+      for (const command of lesson.commands) {
+        await page
+          .getByRole("group", { name: "Choose a command" })
+          .getByRole("button", { name: command.command, exact: true })
+          .click();
+        await expect(
+          page.locator(".command-explanation").first(),
+        ).toContainText("Read each part");
+        await expect(
+          page.locator(".command-explanation").first(),
+        ).toContainText("Understand the result");
+        await expect(
+          page.locator(".command-explanation").first(),
+        ).toContainText("A common mistake");
+      }
       await expect(
         page.getByRole("navigation", { name: "Breadcrumb" }),
       ).toContainText(lesson.title);
