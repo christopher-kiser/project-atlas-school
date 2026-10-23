@@ -2,7 +2,7 @@
 
 Atlas develops the ability to inspect a system, explain its behavior, make a small justified change, and prove the result. The pathway starts with Linux and terminal fluency, moves through networking and automation, and builds toward operating cloud systems. Certifications support that work; they do not define the course or replace project evidence.
 
-The curriculum now has 61 released lessons across 22 competency sections rather than a weekly schedule. It includes 24 expanded beginner/tool lessons and 24 supporting video selections. Every lesson has its own Videos stage; videos supplement written teaching and practical evidence. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
+The curriculum now has 63 released lessons across 22 competency sections rather than a weekly schedule. It includes 24 expanded beginner/tool lessons and 24 supporting video selections. Every lesson has its own Videos stage; videos supplement written teaching and practical evidence. `src/content/sections.ts` owns the topic map; `src/content/index.ts` assembles the released lessons and the expansion backlog. The topic map describes the intended breadth, not a claim that every topic already has a full lesson. See [CONTENT-BACKLOG.md](CONTENT-BACKLOG.md) for unfinished depth and [RESEARCH.md](RESEARCH.md) for dated source verification.
 
 ## What a lesson must accomplish
 
@@ -127,3 +127,13 @@ Certification readiness uses additional checklists and legitimate practice exams
 ## Expanding a section
 
 Add depth in the smallest useful lesson units. Every new lesson needs a concrete task, likely failure, observable evidence, a recovery test, and later retrieval of earlier skills. Test demonstrations on the declared environment, verify version-sensitive documentation, and distinguish local simulation from real operation. Add a released lesson only when its practical can be attempted honestly; a topic name, diagram, or future idea remains backlog until teaching and evidence requirements exist.
+
+## Six-month review implementation · October 23, 2026
+
+The Career roadmap now maps six competency-paced phases to real lessons, eight preserved portfolio briefs, independent tasks and interleaved review. The original April 2027 target is conditional on demonstrated capability. Two new prerequisite lessons teach CIDR planning and a tested Python CLI through safe fixtures. Existing practical and delayed retrieval rules remain in force.
+
+The certification view distinguishes provider-issued credential types, training versus assessment costs, exact lesson preparation and outstanding gaps. Short CLF/SAA teaching sets (14 scenarios each) save `kind: study`; they never satisfy the separate unseen mock target. Learners can record self-reported earned credentials with safe optional links; Atlas does not verify or issue the award. Older version-1 backups remain readable; older published readers reject the new optional fields, so future rollout/rollback must retain compatible readers.
+
+Pure content is shared through `curriculum-manifest.json` and `scripts/curriculum-sync.mjs`; run `npm run check:curriculum` independently in either repo. After reviewing changed content, `node scripts/curriculum-sync.mjs --refresh` updates its manifest. To copy from a reviewed peer use `--from <checkout> --write`; the command refuses dirty destination content. Review both adapters/PRs and their manifests; neither script deploys. Authentication, storage, accounts and payments remain app-owned.
+
+See [educational audit](EDUCATIONAL-AUDIT.md) for the A–T gaps and eight project evaluations, and [implementation report](DUAL-SITE-IMPLEMENTATION.md) for current execution evidence and remaining acceptance.

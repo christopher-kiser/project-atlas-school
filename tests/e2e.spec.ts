@@ -566,6 +566,7 @@ test("certification scores and portfolio attestations persist with explicit evid
   page,
 }) => {
   await open(page, "certifications");
+  await page.getByRole("button", { name: /LPI Linux Essentials/ }).click();
   await page.getByLabel("Practice score for LPI Linux Essentials").fill("88");
   await page
     .getByLabel("Practice exam source", { exact: true })
@@ -573,6 +574,7 @@ test("certification scores and portfolio attestations persist with explicit evid
   await page.getByRole("button", { name: "Record practice score" }).click();
   await expect(page.getByText("88%", { exact: true })).toBeVisible();
   await page.reload();
+  await page.getByRole("button", { name: /LPI Linux Essentials/ }).click();
   await expect(
     page.getByText("Legitimate practice set — browser test fixture"),
   ).toBeVisible();
@@ -658,6 +660,8 @@ for (const route of [
   "videos",
   "settings",
   "portfolio",
+  "career",
+  "certifications",
 ]) {
   test(`WCAG accessibility scan: ${route}`, async ({ page }, testInfo) => {
     await open(page, route);
@@ -683,3 +687,103 @@ for (const route of [
     if (route === "dashboard") await screenshot(page, "dashboard-desktop.png");
   });
 }
+
+test("six-month plan, study practice and provider reports preserve evidence boundaries", async ({
+  page,
+}) => {
+  await open(page, "career");
+  await expect(
+    page.getByRole("heading", { name: "Your six-month engineering plan" }),
+  ).toBeVisible();
+  await expect(page.locator(".month-plan")).toHaveCount(6);
+  await page.locator(".month-plan").nth(1).locator("summary").click();
+  await expect(
+    page
+      .locator(".month-plan")
+      .nth(1)
+      .locator('a[href="#/lesson/network-cidr"]'),
+  ).toBeVisible();
+  await open(page, "certifications");
+  await page.getByRole("button", { name: /^CLF-C02/ }).click();
+  const study = page.getByRole("region", {
+    name: "Atlas study for AWS Certified Cloud Practitioner",
+  });
+  await study
+    .getByRole("button", { name: "Start 14-question study set" })
+    .click();
+  for (let index = 0; index < 14; index++) {
+    await study.getByRole("radio").first().check();
+    await study
+      .getByRole("button", { name: "Check answer", exact: true })
+      .click();
+    await expect(
+      study.getByText(
+        "Review foundations (opens in a new tab to keep this study session):",
+      ),
+    ).toBeVisible();
+    await study
+      .getByRole("button", {
+        name: index === 13 ? "Finish study set" : "Next question",
+        exact: true,
+      })
+      .click();
+  }
+  await study
+    .getByRole("button", { name: "Save study result", exact: true })
+    .click();
+  await expect(
+    study.getByRole("button", { name: "Study result saved", exact: true }),
+  ).toBeDisabled();
+  await expect
+    .poll(
+      async () =>
+        (await readData(page)).certifications.filter((c) => c.kind === "study")
+          .length,
+    )
+    .toBe(1);
+  const card = page.locator(".cert-card").filter({
+    has: page.getByRole("heading", {
+      name: "AWS Certified Cloud Practitioner",
+      exact: true,
+    }),
+  });
+  await expect(
+    card.getByText(/The standard target is two scores/),
+  ).toBeVisible();
+  const award = page.getByRole("region", {
+    name: "Credential evidence for AWS Certified Cloud Practitioner",
+  });
+  await award
+    .getByLabel("Provider / award source")
+    .fill("Browser test only — provider award fixture");
+  await award
+    .getByLabel("Public credential link (optional)")
+    .fill("https://example.com/credential-test-fixture");
+  await award
+    .getByRole("button", { name: "Save self-reported credential" })
+    .click();
+  await expect(
+    award.getByRole("link", { name: "Open reported credential link" }),
+  ).toHaveAttribute("href", "https://example.com/credential-test-fixture");
+  await page.reload();
+  await page.getByRole("button", { name: /^CLF-C02/ }).click();
+  await expect(
+    page.getByRole("link", { name: "Open reported credential link" }),
+  ).toBeVisible();
+  const data = await readData(page);
+  expect(data.certifications.filter((c) => c.kind === "study")).toHaveLength(1);
+  expect(
+    data.certifications.filter((c) => c.kind === "credential"),
+  ).toHaveLength(1);
+  expect(data.attempts).toHaveLength(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const result = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(result.violations.map((v) => v.id)).toEqual([]);
+});

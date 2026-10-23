@@ -8,14 +8,16 @@ An interactive, local-first engineering school for the path from terminal beginn
 
 The Pages address is the configured deployment target. Confirm publication through the repository’s latest successful Pages deployment; this document does not independently establish that deployment has completed.
 
+The review branch adds a six-month roadmap, CIDR and Python CLI lessons, 28 original AWS teaching scenarios, and separate study/credential evidence. See [educational audit](docs/EDUCATIONAL-AUDIT.md), [credential research](docs/CREDENTIAL-RESEARCH.md), and [implementation report](docs/DUAL-SITE-IMPLEMENTATION.md). These changes have not been merged or deployed.
+
 ## What is included
 
-- **61 released lessons across a 22-section competency map**, from Linux foundations through cloud, automation, containers, security, reliability, and architecture.
+- **63 released lessons across a 22-section competency map**, from Linux foundations through cloud, automation, containers, security, reliability, and architecture.
 - Retrieval, prediction, diagnosis, command-fill exercises, spaced review, weak-area tracking, a simulated terminal, and a diagnostic decision exercise.
 - Practical submissions with output, commands, explanation, code, configuration, links, and supported screenshots.
 - **8 portfolio project briefs**, including a production-style capstone, with evidence rubrics and recorded peer-review notes.
 - **24 selected videos** from Harvard, MIT, Microsoft, AWS and other official educators, available in every lesson’s **Videos** tab and a separate video library.
-- **12 selective certification checkpoints** and **28 curated references**.
+- **19 credential pathways (12 existing checkpoints plus 7 free or conditional routes)** and **28 curated references**.
 - Existing Atlas history and a short calibration, so previously practiced material is recognized without being silently marked mastered.
 - IndexedDB persistence, validated JSON export/import, and merge behavior for moving progress between computers.
 - Local autosaved practical/project drafts that survive navigation and refresh without awarding progress.

@@ -1,3 +1,5 @@
+import { EngineeringPathway, ProjectMilestones } from "./Pathway";
+import { CertificationStudy, CredentialEvidence } from "./CertificationStudy";
 import { VideoLibrary } from "./Videos";
 import {
   LessonStudyOverview,
@@ -59,6 +61,7 @@ import {
   getReviewQueue,
   getWeakAreas,
   isProjectVerified,
+  isPracticeScore,
   newId,
   type AtlasData,
   type ProjectSubmission,
@@ -1340,6 +1343,7 @@ function ProjectEditor({
                 <li key={s}>{s}</li>
               ))}
             </ol>
+            <ProjectMilestones id={project.id} />
             <h3>Portfolio artifacts</h3>
             <ul className="check-list">
               {project.deliverables.map((d) => (
@@ -1480,6 +1484,7 @@ export function Career(props: DataProps) {
           independently audited credentials.
         </p>
       </div>
+      <EngineeringPathway data={props.data} />
       {gates.map((g) => {
         const status = evaluateGate(g, props.data);
         return (
@@ -1561,7 +1566,9 @@ export function Career(props: DataProps) {
 }
 
 export function Certifications(props: DataProps) {
-  const [expanded, setExpanded] = useState<string | null>("linux-essentials");
+  const [expanded, setExpanded] = useState<string | null>(
+    "cisco-networking-basics",
+  );
   const [score, setScore] = useState("");
   const [source, setSource] = useState("");
   const [busy, setBusy] = useState(false);
@@ -1600,7 +1607,7 @@ export function Certifications(props: DataProps) {
       <PageTitle
         eyebrow="CERTIFICATION ROADMAP"
         title="Credentials that support the work."
-        description="Official details checked October 22, 2026. Start with practical competence; buy an exam only when it serves a clear next step."
+        description="Start with free learning and practical competence. Each pathway states its credential type, costs, evidence and remaining preparation."
       />
       <div className="notice">
         <GraduationCap size={24} />
@@ -1610,10 +1617,12 @@ export function Certifications(props: DataProps) {
       <div className="cert-list">
         {certifications.map((c) => {
           const scores = props.data.certifications.filter(
-            (s) => s.certificationId === c.id,
+            (s) => s.certificationId === c.id && isPracticeScore(s),
           );
           const relevant = lessons.filter((l) =>
-            c.sections.includes(l.section),
+            c.lessonIds
+              ? c.lessonIds.includes(l.id)
+              : c.sections.includes(l.section),
           );
           const demonstrated = relevant.filter((l) =>
             ["Demonstrated", "Independent"].includes(
@@ -1659,6 +1668,24 @@ export function Certifications(props: DataProps) {
               {expanded === c.id && (
                 <div className="cert-detail">
                   <p>{c.why}</p>
+                  <div className="topic-tags">
+                    <span>{c.kind ?? "Professional certification"}</span>
+                    <span>{c.freeStatus ?? c.cost}</span>
+                  </div>
+                  <dl className="credential-costs">
+                    <dt>Training</dt>
+                    <dd>
+                      {c.trainingCost ??
+                        "See official training options; course fees may vary."}
+                    </dd>
+                    <dt>Assessment</dt>
+                    <dd>{c.assessmentCost ?? c.cost}</dd>
+                    <dt>Eligibility</dt>
+                    <dd>
+                      {c.eligibility ??
+                        "Check the current provider registration and assessment requirements."}
+                    </dd>
+                  </dl>
                   <div className="cert-columns">
                     <div>
                       <h3>When it makes sense</h3>
@@ -1746,13 +1773,43 @@ export function Certifications(props: DataProps) {
                       ))}
                     </div>
                   </div>
+                  {c.gaps && (
+                    <>
+                      <h3>Preparation still needed</h3>
+                      <ul>
+                        {c.gaps.map((gap) => (
+                          <li key={gap}>{gap}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  {c.learningUrl && (
+                    <a
+                      className="button secondary"
+                      href={c.learningUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Official learning path <ExternalLink size={16} />
+                    </a>
+                  )}
+                  <CertificationStudy
+                    {...props}
+                    certificationId={c.id}
+                    certificationName={c.name}
+                  />
+                  <CredentialEvidence
+                    {...props}
+                    certificationId={c.id}
+                    certificationName={c.name}
+                  />
                   <a
                     className="button primary"
                     href={c.url}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Official exam & current price
+                    Official credential & current terms
                     <ExternalLink size={16} />
                   </a>
                   <p className="fine">{c.verified}</p>
@@ -1897,9 +1954,9 @@ export function Settings(props: DataProps) {
           <h2>Export progress</h2>
           <p>
             Includes prior history, retrieval attempts, practical submissions,
-            screenshots, projects, and certification practice scores.
-            Unsubmitted drafts stay on this browser; save them as evidence
-            before exporting.
+            screenshots, projects, practice scores, study results, and reported
+            credentials. Unsubmitted drafts stay on this browser; save them as
+            evidence before exporting.
           </p>
           <button
             className="button primary"
@@ -1986,7 +2043,7 @@ export function Settings(props: DataProps) {
             {pending.data.attempts.length} retrieval attempts ·{" "}
             {pending.data.submissions.length} practical submissions ·{" "}
             {pending.data.projects.length} projects ·{" "}
-            {pending.data.certifications.length} practice scores
+            {pending.data.certifications.length} certification records
           </p>
           <p>
             Unique evidence is added. Newer edits to the same submission or
